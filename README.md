@@ -23,16 +23,21 @@ Laravel環境構築
 ## 使用技術
 フロントエンド：HTML/CSS/Blade  
 バックエンド：  
-・PHP
-・Laravel
+・PHP  
+・Laravel  
 データベース  
-・MySQL
+・MySQL  
 開発環境：Docker/Docker Compose
 
 
 ## URL
 ・開発環境：
 ・phpMyAdmin:
+
+## ER図
+![ER図](./images/frema.png)
+
+
 
 
 
