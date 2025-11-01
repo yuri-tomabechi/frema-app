@@ -1,6 +1,6 @@
 # フリマアプリ
 
-##　環境構築
+## 環境構築
 
 Dockerビルド
 
@@ -20,12 +20,12 @@ Laravel環境構築
 6. php artisan db:seed
 
 
-##　使用技術
-フロントエンド：HTML/CSS/Blade
-バックエンド：
+## 使用技術
+フロントエンド：HTML/CSS/Blade  
+バックエンド：  
 ・PHP
 ・Laravel
-データベース
+データベース  
 ・MySQL
 開発環境：Docker/Docker Compose
 
