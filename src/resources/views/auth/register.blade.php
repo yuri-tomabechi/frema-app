@@ -1,12 +1,8 @@
 @extends('layouts.app')
 
-@section('css')
-<link rel="stylesheet" href="{{ asset('css/register.css') }}">
-@endsection
-
 @section('content')
-<div class="register-form__content">
-      <div class="register-form__heading">
+<div class="form__content">
+      <div class="form__heading">
         <h2>会員登録</h2>
       </div>
       <form class="form" action="/register" method="post" novalidate>
@@ -66,7 +62,7 @@
                     <input type="password" name="password_confirmation" />
                 </div>
                 <div class="form__error">
-                @error('password')
+                @error('password_confirmation')
                 {{ $message }}
                 @enderror
                 </div>
@@ -75,8 +71,8 @@
         <div class="form__button">
           <button class="form__button-submit" type="submit">登録する</button>
         </div>
-        <div class="login__button">
-          <a href="" class="login__button">ログインはこちら</a>
+        <div class="login">
+          <a href="{{ route('login')}}" class="button">ログインはこちら</a>
         </div>
       </form>
     </div>

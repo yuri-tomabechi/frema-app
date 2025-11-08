@@ -34,7 +34,7 @@ Laravel環境構築
 フロントエンド：HTML/CSS/Blade  
 バックエンド：  
 ・PHP  
-・Laravel  
+・Laravel  8.83.8  
 データベース  
 ・MySQL  
 開発環境：Docker/Docker Compose
