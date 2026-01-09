@@ -1,0 +1,7 @@
+.list__flex .first {
+    color: black;
+    margin-right: 50px;
+}
+.list__flex .second{
+    color: red;
+}

@@ -1,0 +1,131 @@
+
+.purchase__flex{
+    display: flex;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+.flex__left{
+    width: 60%;
+}
+.item{
+    display: flex;
+    border-bottom: 1px solid black;
+    padding-bottom: 60px;
+}
+.item .item__img{
+    width: 40%;
+    margin-right: 60px;
+}
+.item__img img{
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+}
+.item__name{
+    margin: 0;
+}
+.item__price{
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+/* payment */
+.pay__option{
+    padding-bottom: 60px;
+    border-bottom: 1px solid black;
+    padding-left: 20px;
+}
+.pay__option select{
+    margin-left: 30px;
+    padding: 2px 5px;
+    width: 250px;
+}
+
+
+/* delivery */
+.delivery{
+    padding-bottom: 40px;
+    border-bottom: 1px solid black;
+    padding-left: 20px;
+    margin-bottom: 60px;
+}
+.delivery__flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.delivery a{
+    color: #0073CC;
+    text-decoration: none;
+}
+.delivery p{
+    padding-left: 30px;
+}
+
+/* right */
+.flex__right{
+    width: 40%;
+    box-sizing: border-box;
+    padding-left: 80px;
+}
+.summary__price, .summary__payment{
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid black;
+    padding: 20px 30px;
+    width: 100%;
+}
+.summary__payment{
+    border-top: none;
+    margin-bottom: 40px;
+}
+.summary__payment .howto{
+    padding-right: 10px;
+}
+.purchase__btn{
+    padding: 10px;
+    background-color: #ff5555;
+    color: #fff;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+}
+
+/* address change */
+.form__group{
+    padding-bottom: 20px;
+}
+.form__label--item{
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+
+
+@media screen and (max-width: 850px) {
+    .purchase__flex {
+            flex-direction: column;
+            max-width: 700px;
+        }
+    .flex__left, .flex__right {
+            width:  100%;
+        }
+    .flex__right{
+        padding-left: 0;
+        max-width: 500px;
+        margin: 0 auto;
+        margin-bottom: 80px;
+    }
+
+        .item .item__img {
+            width: 50%;
+        }
+    
+        .item__img img {
+            height: 330px;
+            width: 100%;
+        }
+}

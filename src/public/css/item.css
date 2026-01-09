@@ -1,0 +1,214 @@
+.list{
+    border-bottom: 1px solid #666;
+    padding-bottom: 10px;
+    margin-bottom: 40px;
+}
+.list__flex{
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 70%;
+}
+.list__flex a{
+    text-decoration: none;
+}
+
+.list__flex .red{
+    color: red;
+}
+.list__flex .left{
+    margin-right: 50px;
+}
+
+.list__flex .black{
+    color: black;
+}
+
+section{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.item__flex{
+    display: flex;
+    list-style: none;
+    /* justify-content: space-between; */
+    padding-left: 0;
+    flex-wrap: wrap;
+    gap: 4%;
+}
+.item__flex li a{
+    text-decoration: none;
+    color: black;
+}
+.item__flex li{
+    width: 22%;
+    height: 250px;
+    margin-bottom: 30px;
+}
+.item__flex li p{
+    margin: 0;
+    margin-top: 5px;
+}
+.item__flex img{
+    width: 100%;
+    object-fit: cover;
+    height: 90%;
+}
+
+
+/* detail_page */
+.detail__flex{
+    display: flex;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 0 20px;
+}
+.detail__flex .item__img{
+    width: 50%;
+    box-sizing: border-box;
+    padding: 60px;
+}
+.item__img img{
+    max-height: 500px;
+    width: 100%;
+    object-fit: cover;
+}
+.detail__box{
+    width: 50%;
+    box-sizing: border-box;
+    padding: 20px 40px;
+}
+.button{
+    display: flex;
+}
+.favorite, .comment{
+    width: 50px;
+    text-align: center;
+}
+.button p{
+    color: black;
+    margin: 0px;
+}
+.button img{
+    width: 50px;
+}
+.favorite button{
+    padding: 0;
+    cursor: pointer;
+}
+.btn{
+    text-align: center;
+    margin-top: 15px;
+}
+.btn a{
+    background-color: #ff5555;
+    text-decoration: none;
+    color: #fff;
+    padding: 7px 30px;
+    width: 100%;
+    display:inline-block;
+}
+
+.category__flex, .condition__flex, .category{
+    display: flex;
+}
+.category__flex .category__h1, .condition__h1{
+    width: 170px;
+}
+
+.category{
+    flex-wrap: wrap;
+}
+.category__name{
+    background-color: #e5e5e5;
+    padding: 2px 20px;
+    border-radius: 20px;
+    /* margin-right: 10px; */
+    margin: 7px;
+}
+.comment__user{
+    display: flex;
+}
+.comment__user .user__icon{
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+textarea{
+    width: 100%;
+}
+.comment h4{
+    margin-bottom: 5px;
+}
+.comment__area{
+    background-color: #e5e5e5;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.comment__area p{
+    margin: 0;
+}
+.comment__box{
+    margin-bottom: 100px;
+}
+.btn .comment__btn {
+    background-color: #ff5555;
+    text-decoration: none;
+    color: #fff;
+    padding: 7px 30px;
+    width: 100%;
+    display: inline-block;
+    border: none;
+    cursor: pointer;
+}
+
+
+
+/* 成功ページ */
+.success-page {
+    text-align: center;
+}
+
+/* sold */
+.item__flex li{
+    position: relative;
+}
+.sold-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #f65556;
+    color: #fff;
+    padding: 6px 10px;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+
+/* favorite */
+
+/* .favorite-icon {
+    filter: hue-rotate(330deg) saturate(4);
+    /* 画像を赤寄りに */
+/* } */ 
+
+.favorite{
+    width: 50px;
+    height: 50px;
+}
+
+.favorite.active path{
+    fill: gold;
+}
+
+
+@media screen and (max-width: 850px){
+    .item__flex li {
+            width: 30%;
+            height: 230px;
+            margin-bottom: 30px;
+        }
+    
+}
