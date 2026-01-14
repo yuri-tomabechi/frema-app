@@ -44,44 +44,45 @@ class PurchaseController extends Controller
 
         $user = auth()->user();
         // 既存 purchase を取得（なければ作成）
-        $purchase = Purchase::firstOrCreate([
+        Purchase::updateOrCreate([
             'user_id' => $user->id,
             'item_id' => $item_id,
         ],
         [
-            'payment'   => '未選択',
-            'post_code' => $request->post_code,
-            'address'   => $request->address,
-            'building'  => $request->building,
-        ]
-    );
-
-        // 配送先だけ更新（ユーザーは更新しない！）
-        $purchase->update([
-            'post_code' => $request->post_code,
-            'address'   => $request->address,
-            'building'  => $request->building,
-        ]);
-
-        return redirect()->route('purchase.show', $item_id);
-}
-    public function store(PurchaseRequest $request, $item_id)
-    {
-        $request->validate([
-            'payment' => 'required',
-        ]);
-
-        Purchase::create([
-            'user_id'   => auth()->id(),
-            'item_id'   => $item_id,
+            'status'    => 'pending',
             'payment'   => $request->payment,
             'post_code' => $request->post_code,
             'address'   => $request->address,
             'building'  => $request->building,
-        ]);
+            ]
+        );
+        
+        // // 配送先だけ更新（ユーザーは更新しない！）
+        // $purchase->update([
+        //     'post_code' => $request->post_code,
+        //     'address'   => $request->address,
+        //     'building'  => $request->building,
+        // ]);
 
-        return redirect()->route('purchase.complete');
-    }
+        return redirect()->route('purchase.show', $item_id);
+}
+    // public function store(PurchaseRequest $request, $item_id)
+    // {
+    //     $request->validate([
+    //         'payment' => 'required',
+    //     ]);
+
+    //     Purchase::create([
+    //         'user_id'   => auth()->id(),
+    //         'item_id'   => $item_id,
+    //         'payment'   => $request->payment,
+    //         'post_code' => $request->post_code,
+    //         'address'   => $request->address,
+    //         'building'  => $request->building,
+    //     ]);
+
+    //     return redirect()->route('purchase.complete');
+    // }
 
 
     public function checkout(PurchaseRequest $request, $item_id)
@@ -135,12 +136,13 @@ class PurchaseController extends Controller
             $item->update(['is_sold' => true]);
         }
 
-        Purchase::firstOrCreate(
+        Purchase::updateOrCreate(
             [
                 'user_id' => auth()->id(),
                 'item_id' => $itemId,
             ],
             [
+                'status'    => 'paid',
                 'payment'   => 'card',
                 'post_code' => $session->customer_details->address->postal_code ?? '',
                 'address'   => $session->customer_details->address->line1 ?? '',
@@ -161,23 +163,39 @@ class PurchaseController extends Controller
 
     public function webhook(Request $request)
     {
-        $payload = $request->getContent();
-        $event = Event::constructFrom(json_decode($payload, true));
+        // $payload = $request->getContent();
+        // $event = Event::constructFrom(json_decode($payload, true));
 
-        if ($event->type === 'checkout.session.completed') {
+        // if ($event->type === 'checkout.session.completed') {
 
-            $session = $event->data->object;
+        //     $session = $event->data->object;
 
-            Purchase::create([
-                'user_id'   => auth()->id(),   // ここは後で修正する可能性あり
-                'item_id'   => $session->metadata->item_id,
-                'payment'   => 'card',
-                'post_code' => $session->customer_details->address->postal_code,
-                'address'   => $session->customer_details->address->line1,
-                'building'  => $session->customer_details->address->line2,
-            ]);
-        }
+        //     Purchase::create([
+        //         'user_id'   => auth()->id(),   // ここは後で修正する可能性あり
+        //         'item_id'   => $session->metadata->item_id,
+        //         'payment'   => 'card',
+        //         'post_code' => $session->customer_details->address->postal_code,
+        //         'address'   => $session->customer_details->address->line1,
+        //         'building'  => $session->customer_details->address->line2,
+        //     ]);
+        // }
 
         return response('OK', 200);
+    }
+
+    public function convenience(PurchaseRequest $request, $item_id)
+    {
+        Purchase::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'item_id' => $item_id,
+            ],
+            [
+                'status'  => 'pending',
+                'payment' => 'convenience',
+            ]
+        );
+
+        return redirect()->route('purchase.complete');
     }
 }

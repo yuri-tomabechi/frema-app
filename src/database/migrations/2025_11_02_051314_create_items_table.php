@@ -22,6 +22,7 @@ class CreateItemsTable extends Migration
             $table->text('description', 255);
             $table->integer('price');
             $table->string('condition', 255);
+            $table->boolean('is_sold')->default(false);
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
         });

@@ -11,6 +11,10 @@ class Purchase extends Model
 {
     use HasFactory;
 
+    const STATUS_PENDING   = 'pending';   // 入力途中
+    const STATUS_PAID      = 'paid';      // 決済完了
+    const STATUS_CANCELLED = 'cancelled';
+
     protected $fillable = [
         'user_id',
         'item_id',
@@ -18,6 +22,7 @@ class Purchase extends Model
         'post_code',
         'address',
         'building',
+        'status',
         'session_id',
     ];
 

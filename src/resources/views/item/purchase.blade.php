@@ -16,14 +16,14 @@
                 <p class="item__price">¥{{ number_format($item->price) }}</p>
             </div>
         </div>
-    <form action="{{ route('purchase.checkout', $item->id) }}" method="POST">
+    <form action="{{ route('purchase.checkout', $item->id) }}" method="POST" id="paymentForm">
     @csrf
         <div class="pay__option">
             <h3>支払い方法</h3>
-            <select name="payment" id="paymentSelect">
-                <option value="" disabled {{ old('payment') ? '' : 'selected' }}>選択してください</option>
-                <option value="コンビニ払い">コンビニ払い</option>
-                <option value="カード支払い">カード支払い</option>
+            <select name="payment" id="paymentSelect" required>
+                <option value="" selected disabled >選択してください</option>
+                <option value="convenience">コンビニ払い</option>
+                <option value="card">カード支払い</option>
             </select>
             <div class="form__error">
                 @error('payment')
@@ -54,10 +54,39 @@
     </div>
 </div>
 <script>
-    document.getElementById('paymentSelect').addEventListener('change', function() {
-        const selected = this.value;
-        document.getElementById('paymentSummary').textContent = selected;
-    });
+    const paymentSelect = document.getElementById('paymentSelect');
+    const paymentSummary = document.getElementById('paymentSummary');
+
+    function updatePaymentSummary() {
+        const selectedOption = paymentSelect.options[paymentSelect.selectedIndex];
+        if (!selectedOption || selectedOption.value === '') {
+            paymentSummary.textContent = '未選択';
+        } else {
+            paymentSummary.textContent = selectedOption.text;
+        }
+}
+
+    // 初期表示
+    updatePaymentSummary();
+
+    // 変更時
+    paymentSelect.addEventListener('change', updatePaymentSummary);
+
+    document.getElementById('paymentForm').addEventListener('submit', function (e) {
+    const payment = document.getElementById('paymentSelect').value;
+
+    if (!payment) {
+        alert('支払い方法を選択してください');
+        e.preventDefault();
+        return;
+    }
+
+    if (payment === 'card') {
+        this.action = "{{ route('purchase.checkout', $item->id) }}";
+    } else if (payment === 'convenience') {
+        this.action = "{{ route('purchase.complete', $item->id) }}";
+    }
+});
 </script>
 
 

@@ -13,14 +13,16 @@ class ItemController extends Controller
 {
     public function index()
     {
-        $items = Item::latest()
-            ->when(auth()->check(), function ($query) {
-                $query->where('user_id', '!=', auth()->id());
-            })
-            ->get();
+        // $items = Item::latest()
+        //     ->when(auth()->check(), function ($query) {
+        //         $query->where('user_id', '!=', auth()->id());
+        //     })
+        //     ->get();
 
-        return view('item.index', compact('items'));
+        // return view('item.index', compact('items'));
 
+
+        $query = Item::latest();
         $user = Auth::user();
         if ($user){
             if(!$user->hasVerifiedEmail()){
@@ -29,8 +31,12 @@ class ItemController extends Controller
             else if($user->hasVerifiedEmail() && $user->address == null){
                 return redirect('/mypage/profile');
             }
+            else{
+                $query->where('user_id', '!=', auth()->id());
+            }
         }
-        $items = Item::with('categories')->get();
+        $items=$query->get();
+        // $items = Item::with('categories')->get();
         return view('item.index', compact('items'));
     }
 

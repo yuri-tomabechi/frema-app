@@ -18,9 +18,13 @@ class CreatePurchasesTable extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('item_id')->constrained('items');
             $table->string('payment', 255);
+            $table->string('post_code', 8);
             $table->string('address', 255);
+            $table->string('building', 255)->nullable();
             $table->timestamp('created_at')->useCurrent()->nullable();
             $table->timestamp('updated_at')->useCurrent()->nullable();
+            $table->string('status')->default('pending');
+            $table->string('session_id')->nullable();
         });
     }
 

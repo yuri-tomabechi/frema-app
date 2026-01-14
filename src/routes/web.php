@@ -71,7 +71,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::post('/stripe/webhook', [PurchaseController::class, 'webhook']);
     
-    Route::get('/purchase/complete', function () {
+    Route::post('/purchase/complete', function () {
         return view('item.purchase_success');
     })->name('purchase.complete');
     

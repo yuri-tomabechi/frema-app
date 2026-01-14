@@ -37,7 +37,7 @@
             @endforeach
         </div>
         <div class="form__error">
-            @error('categories[]')
+            @error('categories')
                 {{ $message }}
             @enderror
         </div>
@@ -95,7 +95,7 @@
                 </div>
                 <div class="form__group-content">
                     <div class="form__input--text">
-                        <textarea name="description" rows="7" ></textarea>
+                        <textarea name="description" rows="7" >{{ old('description')}}</textarea>
                     </div>
                     <div class="form__error">
                         @error('description')

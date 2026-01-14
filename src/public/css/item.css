@@ -112,6 +112,7 @@ section{
 
 .category__flex, .condition__flex, .category{
     display: flex;
+    align-items: center;
 }
 .category__flex .category__h1, .condition__h1{
     width: 170px;

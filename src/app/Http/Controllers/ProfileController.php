@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Purchase;
 use App\Http\Requests\ProfileRequest;
 
 use Illuminate\Support\Facades\Storage;
@@ -25,7 +26,12 @@ class ProfileController extends Controller
 
         // 購入一覧
         if ($page === 'buy') {
-            $purchases = $user->purchases; // ★ 自分の購入商品を取得
+            // $purchases = $user->purchases; // ★ 自分の購入商品を取得
+
+            $purchases = Purchase::where('user_id', auth()->id())
+                ->where('status', 'paid')
+                ->get();
+
             return view('profile.buy', compact('user', 'purchases'));
         }else
         // 出品一覧

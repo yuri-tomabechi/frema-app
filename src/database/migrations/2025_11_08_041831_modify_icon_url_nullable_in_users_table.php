@@ -27,10 +27,6 @@ class ModifyIconUrlNullableInUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('icon_url')->nullable(false)->change();
-            $table->string('post_code')->nullable(false)->change();
-            $table->string('address')->nullable(false)->change();
-        });
+
     }
 }
