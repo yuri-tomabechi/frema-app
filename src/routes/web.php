@@ -60,7 +60,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // コメント追加
     Route::post('/item/{item_id}/comment', [CommentController::class, 'store'])->name('item.comment');
     // 決済
-    Route::post('/purchase/{item}/checkout', [PurchaseController::class, 'checkout'])
+    Route::post('/purchase/{item_id}/store', [PurchaseController::class, 'store'])->name('purchase.store');
+
+    Route::post('/purchase/{item_id}/checkout', [PurchaseController::class, 'checkout'])
     ->name('purchase.checkout');
 
     Route::get('/purchase/success', [PurchaseController::class, 'success'])
@@ -71,7 +73,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
     Route::post('/stripe/webhook', [PurchaseController::class, 'webhook']);
     
-    Route::post('/purchase/complete', function () {
+    Route::get('/purchase/complete', function () {
         return view('item.purchase_success');
     })->name('purchase.complete');
     

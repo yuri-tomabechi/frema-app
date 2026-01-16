@@ -66,23 +66,31 @@ class PurchaseController extends Controller
 
         return redirect()->route('purchase.show', $item_id);
 }
-    // public function store(PurchaseRequest $request, $item_id)
-    // {
-    //     $request->validate([
-    //         'payment' => 'required',
-    //     ]);
+    public function store(PurchaseRequest $request, $item_id)
+    {
 
-    //     Purchase::create([
-    //         'user_id'   => auth()->id(),
-    //         'item_id'   => $item_id,
-    //         'payment'   => $request->payment,
-    //         'post_code' => $request->post_code,
-    //         'address'   => $request->address,
-    //         'building'  => $request->building,
-    //     ]);
+        $item = Item::findOrFail($item_id);
+        Purchase::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'item_id' => $item_id,
+            ],
+            [
+                'status'    => 'paid',
+                'payment'   => 'convenience',
+                'post_code' => $session->customer_details->address->postal_code ?? '',
+                'address'   => $session->customer_details->address->line1 ?? '',
+                'building'  => $session->customer_details->address->line2 ?? '',
+            ]
+        );
 
-    //     return redirect()->route('purchase.complete');
-    // }
+
+        $item->update([
+            'is_sold' => true,
+        ]);
+
+        return redirect()->route('purchase.complete');
+    }
 
 
     public function checkout(PurchaseRequest $request, $item_id)
@@ -183,19 +191,19 @@ class PurchaseController extends Controller
         return response('OK', 200);
     }
 
-    public function convenience(PurchaseRequest $request, $item_id)
-    {
-        Purchase::updateOrCreate(
-            [
-                'user_id' => auth()->id(),
-                'item_id' => $item_id,
-            ],
-            [
-                'status'  => 'pending',
-                'payment' => 'convenience',
-            ]
-        );
+    // public function convenience(PurchaseRequest $request, $item_id)
+    // {
+    //     Purchase::updateOrCreate(
+    //         [
+    //             'user_id' => auth()->id(),
+    //             'item_id' => $item_id,
+    //         ],
+    //         [
+    //             'status'  => 'pending',
+    //             'payment' => 'convenience',
+    //         ]
+    //     );
 
-        return redirect()->route('purchase.complete');
-    }
+    //     return redirect()->route('purchase.complete');
+    // }
 }

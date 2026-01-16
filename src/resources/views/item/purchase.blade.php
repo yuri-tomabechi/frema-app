@@ -84,7 +84,7 @@
     if (payment === 'card') {
         this.action = "{{ route('purchase.checkout', $item->id) }}";
     } else if (payment === 'convenience') {
-        this.action = "{{ route('purchase.complete', $item->id) }}";
+        this.action = "{{ route('purchase.store', $item->id) }}";
     }
 });
 </script>
