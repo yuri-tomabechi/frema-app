@@ -39,13 +39,19 @@ Laravel環境構築
 ・MySQL  
 開発環境：Docker/Docker Compose
 
+## ログイン情報
+名前 : 山田太郎  
+メールアドレス : taro.0123@icloud.com  
+パスワード : 12341234  
+
+
 
 ## URL
 ・開発環境：
 ・phpMyAdmin:
 
 ## ER図
-![ER図](./images/frema.png)
+![ER図](./frema.png)
 
 
 
