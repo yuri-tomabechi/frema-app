@@ -10,7 +10,7 @@
 ターゲットブラウザ・OS：PC（Chrome/Firefox/Safari　最新バージョン）  
 
 
-##　主要機能
+## 主要機能
 ・ユーザー登録/ログイン  
 ・出品/購入  
 ・商品一覧・検索  
@@ -53,7 +53,7 @@ Laravel環境構築
 
 
 ## URL
-・開発環境：http://localhost
+・開発環境：http://localhost  
 ・phpMyAdmin: http://localhost:8080/  
 
 ## ER図
