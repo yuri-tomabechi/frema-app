@@ -26,7 +26,6 @@ class ProfileController extends Controller
 
         // 購入一覧
         if ($page === 'buy') {
-            // $purchases = $user->purchases; // ★ 自分の購入商品を取得
 
             $purchases = Purchase::where('user_id', auth()->id())
                 ->where('status', 'paid')
@@ -42,11 +41,6 @@ class ProfileController extends Controller
 
     }
 
-    // public function showMyPage()
-    // {
-    //     $user = auth()->user();
-    //     return view('profile.sell' , compact('user'));
-    // }
     public function showEditForm()
     {
         $user = Auth::user();
@@ -65,7 +59,6 @@ class ProfileController extends Controller
 
         // 画像アップロード
         if ($request->hasFile('icon_url')) {
-            // 保存（storage/app/public/profile_images）
             $path = $request->file('icon_url')->store('profile_images', 'public');
             $user->icon_url = $path;
         }

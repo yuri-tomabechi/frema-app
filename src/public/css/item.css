@@ -32,7 +32,6 @@ section{
 .item__flex{
     display: flex;
     list-style: none;
-    /* justify-content: space-between; */
     padding-left: 0;
     flex-wrap: wrap;
     gap: 4%;
@@ -125,7 +124,6 @@ section{
     background-color: #e5e5e5;
     padding: 2px 20px;
     border-radius: 20px;
-    /* margin-right: 10px; */
     margin: 7px;
 }
 .comment__user{
@@ -188,12 +186,6 @@ textarea{
 }
 
 
-/* favorite */
-
-/* .favorite-icon {
-    filter: hue-rotate(330deg) saturate(4);
-    /* 画像を赤寄りに */
-/* } */ 
 
 .favorite{
     width: 50px;

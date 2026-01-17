@@ -13,15 +13,6 @@ class ItemController extends Controller
 {
     public function index()
     {
-        // $items = Item::latest()
-        //     ->when(auth()->check(), function ($query) {
-        //         $query->where('user_id', '!=', auth()->id());
-        //     })
-        //     ->get();
-
-        // return view('item.index', compact('items'));
-
-
         $query = Item::latest();
         $user = Auth::user();
         if ($user){
@@ -36,7 +27,6 @@ class ItemController extends Controller
             }
         }
         $items=$query->get();
-        // $items = Item::with('categories')->get();
         return view('item.index', compact('items'));
     }
 
@@ -55,8 +45,7 @@ class ItemController extends Controller
 
         // ★ 画像を保存（public ディスク）
         $path = $request->file('item_url')->store('items', 'public');
-        // 保存先 → storage/app/public/items/xxxx.jpg
-        // $path = items/xxxx.jpg の形で返る
+        
         // ★ DB 保存
         $item = Item::create([
             'name' => $request->name,

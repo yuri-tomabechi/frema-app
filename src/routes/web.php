@@ -24,19 +24,6 @@ use Illuminate\Support\Facades\Auth;
 */
 
 
-// Route::get('/email/verify', function () {
-//     return view('auth.verify-notice');
-// })->middleware('auth')->name('verification.notice');
-
-// Route::post('/email/verification-notification',
-//     function (Request $request) {
-//         $request->user()->sendEmailVerificationNotification();
-
-//         return back()->with('message', '認証メールを再送信しました。');
-//     }
-// )->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-
 Route::get('/', [ItemController::class, 'index'])->name('item.index');
 Route::get('/purchase/address/{item_id}', [PurchaseController::class, 'edit'])->name('purchase.address.edit');
 Route::put('/purchase/address/{item_id}', [PurchaseController::class, 'update'])
@@ -47,10 +34,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mypage/profile', [ProfileController::class, 'edit']);
     Route::post('/mypage/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/mypage', [ProfileController::class, 'show']);
-    Route::post('/sell', [SellController::class, 'store'])->name('items.store');
+    // Route::post('/sell', [SellController::class, 'store'])->name('items.store');
     Route::get('/sell', [SellController::class, 'showSellForm'])->name('sell.form');
-    // Route::get('/mypage', [ProfileController::class, 'showMyPage']);
-    // Route::get('/mypage/profile', [ProfileController::class, 'showEditForm'])->middleware('auth', 'verified');
     Route::post('/items/store', [ItemController::class, 'store'])->name('items.store');
     // いいね
     Route::post('/item/{item_id}/like', [LikeController::class, 'toggle'])->name('item.like');

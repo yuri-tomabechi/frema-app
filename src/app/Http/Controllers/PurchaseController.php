@@ -56,13 +56,6 @@ class PurchaseController extends Controller
             'building'  => $request->building,
             ]
         );
-        
-        // // 配送先だけ更新（ユーザーは更新しない！）
-        // $purchase->update([
-        //     'post_code' => $request->post_code,
-        //     'address'   => $request->address,
-        //     'building'  => $request->building,
-        // ]);
 
         return redirect()->route('purchase.show', $item_id);
 }
@@ -127,7 +120,7 @@ class PurchaseController extends Controller
             'success_url' => route('purchase.success') . '?session_id={CHECKOUT_SESSION_ID}',
             'cancel_url' => route('purchase.cancel'),
             'metadata'    => [
-              'item_id' => $item->id,
+                'item_id' => $item->id,
             ],
         ]);
 
@@ -177,39 +170,6 @@ class PurchaseController extends Controller
 
     public function webhook(Request $request)
     {
-        // $payload = $request->getContent();
-        // $event = Event::constructFrom(json_decode($payload, true));
-
-        // if ($event->type === 'checkout.session.completed') {
-
-        //     $session = $event->data->object;
-
-        //     Purchase::create([
-        //         'user_id'   => auth()->id(),   // ここは後で修正する可能性あり
-        //         'item_id'   => $session->metadata->item_id,
-        //         'payment'   => 'card',
-        //         'post_code' => $session->customer_details->address->postal_code,
-        //         'address'   => $session->customer_details->address->line1,
-        //         'building'  => $session->customer_details->address->line2,
-        //     ]);
-        // }
-
         return response('OK', 200);
     }
-
-    // public function convenience(PurchaseRequest $request, $item_id)
-    // {
-    //     Purchase::updateOrCreate(
-    //         [
-    //             'user_id' => auth()->id(),
-    //             'item_id' => $item_id,
-    //         ],
-    //         [
-    //             'status'  => 'pending',
-    //             'payment' => 'convenience',
-    //         ]
-    //     );
-
-    //     return redirect()->route('purchase.complete');
-    // }
 }

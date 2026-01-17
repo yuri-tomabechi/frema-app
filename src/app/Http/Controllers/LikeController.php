@@ -12,7 +12,6 @@ class LikeController extends Controller
     {
         $user_id = auth()->id();
 
-        // 既にいいねしているか？
         $like = Like::where('item_id', $item_id)
             ->where('user_id', $user_id)
             ->first();
