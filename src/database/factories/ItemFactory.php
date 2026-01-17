@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 
 class ItemFactory extends Factory
 {
@@ -14,7 +15,7 @@ class ItemFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => 1, // 仮で固定（Seeder側で上書きもできる）
+            'user_id' => User::factory(),
             'item_url' => $this->faker->imageUrl(),
             'name' => $this->faker->word(),
             'brand_name' => $this->faker->company(),

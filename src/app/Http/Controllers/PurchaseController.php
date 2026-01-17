@@ -70,6 +70,12 @@ class PurchaseController extends Controller
     {
 
         $item = Item::findOrFail($item_id);
+        $user = auth()->user();
+
+        $postCode = $request->post_code ?? '';
+        $address  = $request->address ?? '';
+        $building = $request->building ?? '';
+
         Purchase::updateOrCreate(
             [
                 'user_id' => auth()->id(),
@@ -78,9 +84,9 @@ class PurchaseController extends Controller
             [
                 'status'    => 'paid',
                 'payment'   => 'convenience',
-                'post_code' => $session->customer_details->address->postal_code ?? '',
-                'address'   => $session->customer_details->address->line1 ?? '',
-                'building'  => $session->customer_details->address->line2 ?? '',
+                'post_code' => $postCode,
+                'address'   => $address,
+                'building'  => $building,
             ]
         );
 
