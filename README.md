@@ -34,6 +34,18 @@ Laravel環境構築
 4. php artisan key:generate  
 5. php artisan migrate  
 6. php artisan db:seed  
+7. php artisan storage:link
+
+
+## テスト
+1. cp .env .env.testing  
+2. .env.testingのDBの設定を以下に変更  
+    DB_CONNECTION=mysql  
+    DB_HOST=mysql  
+    DB_PORT=3306  
+    DB_DATABASE=demo_test  
+    DB_USERNAME=root  
+    DB_PASSWORD=root  
 
 
 ## 使用技術
@@ -43,6 +55,28 @@ Laravel環境構築
 ・開発環境：Docker/Docker Compose  
 ・その他：Fortify/Stripe/MailHog  
 
+## データベース設定(.env)
+DB_CONNECTION=mysql  
+DB_HOST=mysql  
+DB_PORT=3306  
+DB_DATABASE=frema_app  
+DB_USERNAME=laravel_user  
+DB_PASSWORD=laravel_pass  
+
+## mailhog(.env)
+MAIL_MAILER=smtp  
+MAIL_HOST=mailhog  
+MAIL_PORT=1025  
+MAIL_USERNAME=null  
+MAIL_PASSWORD=null  
+MAIL_ENCRYPTION=null  
+MAIL_FROM_ADDRESS=example@frema-app.test  
+MAIL_FROM_NAME="${APP_NAME}"  
+
+## Stripe
+STRIPE_KEY=xxxxx
+STRIPE_SECRET=xxxxx
+※設定お願いします
 
 ## ログイン情報
 名前 : 山田太郎  
@@ -50,6 +84,9 @@ Laravel環境構築
 パスワード : 12341234  
 
 ※管理者ユーザーはなし  
+
+## クレジットカード
+クレジットカード番号：4242 4242 4242 4242  
 
 
 ## URL
