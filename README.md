@@ -30,12 +30,36 @@ Laravel環境構築
 
 1. docker-compose exec php bash  
 2. composer install  
-3. cp .env.example .env  .env.exampleファイルから.envを作成し、環境変数を変更  
+3. cp .env.example .env  .env.exampleファイルから.envを作成し、DB設定を変更（下記参照）   
 4. php artisan key:generate  
 5. php artisan migrate  
 6. php artisan db:seed  
 7. php artisan storage:link
 
+## データベース設定(.env)
+DB_CONNECTION=mysql  
+DB_HOST=mysql  
+DB_PORT=3306  
+DB_DATABASE=frema_app  
+DB_USERNAME=laravel_user  
+DB_PASSWORD=laravel_pass  
+
+## mailhog(.env)
+MAIL_MAILER=smtp  
+MAIL_HOST=mailhog  
+MAIL_PORT=1025  
+MAIL_USERNAME=null  
+MAIL_PASSWORD=null  
+MAIL_ENCRYPTION=null  
+MAIL_FROM_ADDRESS=example@frema-app.test  
+MAIL_FROM_NAME="${APP_NAME}"  
+
+## 認証について
+本アプリケーションでは Laravel Fortify を使用しています。
+.env には以下の設定が必要です。
+
+FORTIFY_ENABLED=true  
+FORTIFY_FEATURES=registration,login,email-verification
 
 ## テスト
 1. cp .env .env.testing  
@@ -55,23 +79,6 @@ Laravel環境構築
 ・開発環境：Docker/Docker Compose  
 ・その他：Fortify/Stripe/MailHog  
 
-## データベース設定(.env)
-DB_CONNECTION=mysql  
-DB_HOST=mysql  
-DB_PORT=3306  
-DB_DATABASE=frema_app  
-DB_USERNAME=laravel_user  
-DB_PASSWORD=laravel_pass  
-
-## mailhog(.env)
-MAIL_MAILER=smtp  
-MAIL_HOST=mailhog  
-MAIL_PORT=1025  
-MAIL_USERNAME=null  
-MAIL_PASSWORD=null  
-MAIL_ENCRYPTION=null  
-MAIL_FROM_ADDRESS=example@frema-app.test  
-MAIL_FROM_NAME="${APP_NAME}"  
 
 ## Stripe
 STRIPE_KEY=xxxxx
