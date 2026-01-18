@@ -81,9 +81,9 @@ FORTIFY_FEATURES=registration,login,email-verification
 
 
 ## Stripe
-STRIPE_KEY=xxxxx
-STRIPE_SECRET=xxxxx
-※設定お願いします
+STRIPE_KEY=xxxxx  
+STRIPE_SECRET=xxxxx  
+※設定お願いします  
 
 ## ログイン情報
 名前 : 山田太郎  
