@@ -34,7 +34,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/mypage/profile', [ProfileController::class, 'edit']);
     Route::post('/mypage/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/mypage', [ProfileController::class, 'show']);
-    // Route::post('/sell', [SellController::class, 'store'])->name('items.store');
     Route::get('/sell', [SellController::class, 'showSellForm'])->name('sell.form');
     Route::post('/items/store', [ItemController::class, 'store'])->name('items.store');
     // いいね

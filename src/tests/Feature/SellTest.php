@@ -2,62 +2,65 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
-use App\Models\Item;
 use App\Models\Category;
+use App\Models\Item;
 
 class SellTest extends TestCase
 {
     use RefreshDatabase;
 
-
     /** @test */
     public function 商品出品画面で必要な情報が保存できる()
     {
-        // ユーザー作成
+        Storage::fake('public');
+
+        // ユーザー
         $user = User::factory()->create();
 
-        // カテゴリ作成
-        $category = Category::factory()->create(['name' => 'テストカテゴリ']);
+        // カテゴリ
+        $category = Category::factory()->create();
 
-        // 出品フォームデータ
+        // 出品データ
         $data = [
-            'user_id'    => $user->id,
-            'name'       => 'テスト商品',
-            'brand_name' => 'テストブランド',
+            'name'        => 'テスト商品',
+            'brand_name'  => 'テストブランド',
             'description' => 'これはテスト商品の説明です',
-            'price'      => 5000,
-            'condition'  => '良好',
-            'categories' => [$category->id],  // pivot用
-            'item_url'   => 'https://via.placeholder.com/640x480.png/0088ee?text=test',
+            'price'       => 5000,
+            'condition'   => '良好',
+            'categories'  => [$category->id],
+            'item_url'    => UploadedFile::fake()->create('item.jpg', 100, 'image/jpeg'),
         ];
 
-        // 出品アクション
+        // 出品実行
         $response = $this->actingAs($user)
             ->post(route('items.store'), $data);
 
-        // 出品後、商品一覧ページにリダイレクトされる
-        $response->assertRedirect(route('item.index'));
+        // リダイレクト確認
+        $response->assertRedirect('/mypage?page=sell');
 
-        // itemsテーブルに正しく保存されていることを確認
+        // itemsテーブルに保存されている
         $this->assertDatabaseHas('items', [
-            'user_id'    => $user->id,
-            'name'       => 'テスト商品',
-            'brand_name' => 'テストブランド',
+            'name'        => 'テスト商品',
+            'brand_name'  => 'テストブランド',
             'description' => 'これはテスト商品の説明です',
-            'price'      => 5000,
-            'condition'  => '良好',
+            'price'       => 5000,
+            'condition'   => '良好',
+            'user_id'     => $user->id,
         ]);
 
-        // pivotテーブル category_item に正しく紐づいていることを確認
-        $item = Item::first(); // 作成されたアイテム取得
+        // 画像が保存されている
+        $item = Item::first();
+        Storage::disk('public')->assertExists($item->item_url);
+
+        // カテゴリが紐づいている（pivot）
         $this->assertDatabaseHas('category_item', [
             'item_id'     => $item->id,
             'category_id' => $category->id,
         ]);
     }
-    
 }
