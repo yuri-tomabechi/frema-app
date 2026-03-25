@@ -75,7 +75,7 @@ class PurchaseController extends Controller
                 'item_id' => $item_id,
             ],
             [
-                'status'    => 'paid',
+                'status'    => 'trading',
                 'payment'   => 'convenience',
                 'post_code' => $postCode,
                 'address'   => $address,
@@ -149,7 +149,7 @@ class PurchaseController extends Controller
                 'item_id' => $itemId,
             ],
             [
-                'status'    => 'paid',
+                'status'    => 'trading',
                 'payment'   => 'card',
                 'post_code' => $session->customer_details->address->postal_code ?? '',
                 'address'   => $session->customer_details->address->line1 ?? '',
@@ -171,5 +171,16 @@ class PurchaseController extends Controller
     public function webhook(Request $request)
     {
         return response('OK', 200);
+    }
+
+    public function complete($purchase_id)
+    {
+        $purchase = Purchase::findOrFail($purchase_id);
+
+        $purchase->update([
+            'status' => 'paid',
+        ]);
+
+        return redirect()->route('mypage', ['page' => 'buy']);
     }
 }

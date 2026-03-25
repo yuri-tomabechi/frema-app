@@ -32,7 +32,20 @@ class ProfileController extends Controller
                 ->get();
 
             return view('profile.buy', compact('user', 'purchases'));
-        }else
+
+        }
+        if ($page === 'trade') {
+            $purchases = Purchase::where(function ($query) use ($user) {
+                $query->where('user_id', $user->id)
+                    ->orWhereHas('item', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    });
+            })
+                ->where('status', 'trading')
+                ->get();
+
+            return view('profile.trade', compact('user', 'purchases'));
+        }
         // 出品一覧
         {
             $items = $user->items;  // ★ 自分の出品商品を取得

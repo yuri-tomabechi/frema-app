@@ -16,8 +16,9 @@
 </div>
 <div class="list">
     <div class="list__flex">
-        <a class="black left" href="/mypage?page=sell">出品した商品</a>
-        <a class="red" href="">購入した商品</a>
+        <a class="black" href="/mypage?page=sell">出品した商品</a>
+        <a class="red center" href="/mypage?page=buy">購入した商品</a>
+        <a class="black" href="/mypage?page=trade">取引中の商品</a>
     </div>
 </div>
 <section>

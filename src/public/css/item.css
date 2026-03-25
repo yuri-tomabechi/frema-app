@@ -15,8 +15,12 @@
 .list__flex .red{
     color: red;
 }
+
 .list__flex .left{
     margin-right: 50px;
+}
+.list__flex .center{
+    margin: 0 50px;
 }
 
 .list__flex .black{

@@ -62,6 +62,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('purchase.complete');
     
     Route::get('/purchase/{item_id}', [PurchaseController::class, 'show'])->name('purchase.show');
+    Route::post('/purchase/{purchase_id}/complete', [PurchaseController::class, 'complete'])
+        ->name('purchase.status.complete');
 });
 
 
@@ -79,3 +81,4 @@ function (Request $request) {
 
 // 検索
 Route::get('/search', [ItemController::class, 'search'])->name('item.search');
+
