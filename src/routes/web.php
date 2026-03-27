@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PurchaseController;
@@ -81,4 +81,13 @@ function (Request $request) {
 
 // 検索
 Route::get('/search', [ItemController::class, 'search'])->name('item.search');
+
+// チャット機能
+Route::middleware(['auth'])->group(function () {
+    Route::get('/message/{purchase_id}', [MessageController::class, 'show'])
+        ->name('message.show');
+
+    Route::post('/message/{purchase_id}', [MessageController::class, 'store'])
+        ->name('message.store');
+});
 

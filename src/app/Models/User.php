@@ -11,6 +11,7 @@ use App\Models\Item;
 use App\Models\Purchase;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Models\Message;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -74,6 +75,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function likedItems()
     {
         return $this->belongsToMany(Item::class, 'likes');
+    }
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }
 

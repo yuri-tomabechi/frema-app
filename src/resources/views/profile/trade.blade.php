@@ -26,7 +26,7 @@
             <ul class="item__flex">
                 @forelse($purchases as $purchase)
                     <li>
-                        <a href="">
+                        <a href="{{ route('message.show', $purchase->id) }}">
                             <img src="{{ asset('storage/' . $purchase->item->item_url) }}" alt="">
                             <p>{{ $purchase->item->name }}</p>
                         </a>

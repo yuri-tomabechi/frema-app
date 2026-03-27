@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Item;
+use App\Models\Message;
 
 class Purchase extends Model
 {
@@ -33,5 +34,9 @@ class Purchase extends Model
     public function item()
     {
         return $this->belongsTo(Item::class);
+    }
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }
