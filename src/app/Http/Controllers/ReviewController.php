@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ReviewRequest;
 use App\Models\Purchase;
 use App\Models\Review;
+use App\Mail\TradeCompletedMail;
+use Illuminate\Support\Facades\Mail;
 
 class ReviewController extends Controller
 {
@@ -44,6 +46,9 @@ class ReviewController extends Controller
             $purchase->update([
                 'status' => 'paid',
             ]);
+
+            Mail::to($purchase->item->user->email)
+                ->send(new TradeCompletedMail($purchase));
         }
 
         return redirect()->route('item.index');

@@ -132,12 +132,12 @@
                 @endforelse
             </div>
 
-            <form action="{{ route('message.store', $purchase->id) }}" method="POST" class="trade-form"
+            <form id="chatForm" action="{{ route('message.store', $purchase->id) }}" method="POST" class="trade-form"
                 enctype="multipart/form-data">
                 @csrf
 
                 <div class="trade-form__row">
-                    <textarea name="message" class="trade-form__textarea" placeholder="取引メッセージを記入してください">{{ old('message') }}</textarea>
+                    <textarea name="message" id="messageInput" class="trade-form__textarea" placeholder="取引メッセージを記入してください">{{ old('message') }}</textarea>
 
                     <label for="image" class="trade-form__image-label">画像を追加</label>
                     <input type="file" name="image" id="image" class="trade-form__image-input">
@@ -161,17 +161,50 @@
         </section>
         <div id="editModal" class="edit-modal">
             <div class="edit-modal__content">
-                <form id="editForm" method="POST">
+                <form id="editForm" method="POST" class="edit-flex">
                     @csrf
                     @method('PUT')
 
                     <textarea name="message" id="editMessageText"></textarea>
-
-                    <button type="submit">更新</button>
-                    <button type="button" onclick="closeModal()">キャンセル</button>
+                    <div class="button-flex">
+                        <button type="submit" class="update-button">更新</button>
+                        <button type="button" onclick="closeModal()">キャンセル</button>
+                    </div>
                 </form>
             </div>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const textarea = document.getElementById('messageInput');
+
+                if (!textarea) return;
+
+                const key = 'chat_input_{{ $purchase->id }}';
+
+                const saved = localStorage.getItem(key);
+                if (saved) {
+                    textarea.value = saved;
+                }
+
+                textarea.addEventListener('input', function() {
+                    localStorage.setItem(key, textarea.value);
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const textarea = document.getElementById('messageInput');
+                const form = document.getElementById('chatForm');
+
+                if (!textarea || !form) return;
+
+                const key = 'chat_input_{{ $purchase->id }}';
+
+                form.addEventListener('submit', function() {
+                    localStorage.removeItem(key);
+                });
+            });
+        </script>
         <script>
             function editMessage(id, text) {
                 const modal = document.getElementById('editModal');
@@ -309,18 +342,14 @@
                     messageBox.scrollTop = messageBox.scrollHeight;
                 }
 
-                // まず通常の表示直後に下へ
                 scrollToBottom();
 
-                // 画像読み込み後に高さが変わることがあるので再調整
                 const images = messageBox.querySelectorAll('img');
                 images.forEach(img => {
                     if (!img.complete) {
                         img.addEventListener('load', scrollToBottom);
                     }
                 });
-
-                // 少し遅らせてもう一回
                 setTimeout(scrollToBottom, 100);
             });
         </script>

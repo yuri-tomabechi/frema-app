@@ -289,7 +289,8 @@
 
 .trade-message__actions button{
     border: none;
-    text-shadow: #666;
+    text-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    background-color: white;
 }
 
 /* review */
@@ -389,13 +390,32 @@
     background: rgba(0, 0, 0, 0.3);
     justify-content: center;
     align-items: center;
+
 }
 
 .edit-modal__content {
     background: #fff;
     padding: 20px;
     border-radius: 10px;
+    width: 50%;
 }
+.edit-flex{
+    display: flex;
+    flex-direction: column;
+}
+
+.button-flex{
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+button{
+    cursor: pointer;
+}
+.update-button{
+    margin-right: 15px;
+}
+
 
 @media screen and (max-width: 1100px) {
     .trade-header__title {
