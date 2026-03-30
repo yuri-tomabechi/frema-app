@@ -26,7 +26,6 @@
                         {{ $tradePurchase->item->name }}
                     </a>
                 @empty
-                    <p class="trade-sidebar__empty">取引中の商品はありません</p>
                 @endforelse
             </div>
         </aside>

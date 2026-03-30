@@ -42,6 +42,9 @@
                 @forelse($items as $item)
                     <li>
                         <a href="{{ route('item.detail', $item->id) }}">
+                            @if ($item->is_sold)
+                                <span class="sold-badge">SOLD</span>
+                            @endif
                             <img src="{{ asset('storage/' . $item->item_url) }}" alt="">
                             <p>{{ $item->name }}</p>
                         </a>
