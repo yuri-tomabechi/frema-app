@@ -45,3 +45,55 @@
     border: 1px solid red;
     border-radius: 8px;
 }
+
+
+.profile__info {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile__rating {
+    display: flex;
+    gap: 4px;
+}
+
+.profile__star {
+    font-size: 24px;
+    color: #d9d9d9;
+    line-height: 1;
+}
+
+.profile__star.is-active {
+    color: #ffd400;
+}
+
+.trade-item {
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background: red;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 50%;
+    padding: 4px 9px;
+}
+
+.badge-total {
+    margin-left: 6px;
+    background: red;
+    color: #fff;
+    font-size: 12px;
+    border-radius: 50%;
+    padding: 2px 7px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+}
+

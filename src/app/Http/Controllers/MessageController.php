@@ -12,11 +12,18 @@ class MessageController extends Controller
     public function show($purchase_id)
     {
         $purchase = Purchase::with([
+            'user',
             'item.user',
             'messages.user',
+            'reviews',
         ])->findOrFail($purchase_id);
 
         $user = auth()->user();
+
+        $purchase->messages()
+            ->where('user_id', '!=', auth()->id())
+            ->where('is_read', false)
+            ->update(['is_read' => true]);
 
         if (
             $purchase->user_id !== $user->id &&
@@ -25,19 +32,45 @@ class MessageController extends Controller
             abort(403);
         }
 
-        $purchases = Purchase::with('item')
-            ->where(function ($query) use ($user) {
-                $query->where('user_id', $user->id)
-                    ->orWhereHas('item', function ($q) use ($user) {
-                        $q->where('user_id', $user->id);
-                    });
-            })
-            ->where('status', 'trading')
-            ->get();
+        $hasReviewed = $purchase->reviews->contains(function ($review) use ($user) {
+            return $review->reviewer_id === $user->id;
+        });
+
+        $isBuyer = $purchase->user_id === $user->id;
+        $isSeller = $purchase->item->user_id === $user->id;
+
+        if ($isBuyer) {
+            $purchases = Purchase::with(['item', 'reviews'])
+                ->where('user_id', $user->id)
+                ->where('status', 'trading')
+                ->where('id', '!=', $purchase->id)
+                ->get();
+        } else {
+            $purchases = Purchase::with(['item', 'reviews'])
+                ->whereHas('item', function ($q) use ($user) {
+                    $q->where('user_id', $user->id);
+                })
+                ->where(function ($query) use ($user) {
+                    $query->where('status', 'trading')
+                        ->orWhere(function ($q) use ($user) {
+                            $q->where('status', 'paid')
+                                ->whereDoesntHave('reviews', function ($reviewQuery) use ($user) {
+                                    $reviewQuery->where('reviewer_id', $user->id);
+                                });
+                        });
+                })
+                ->where('id', '!=', $purchase->id)
+                ->get();
+        }
 
         $messages = $purchase->messages()->with('user')->oldest()->get();
 
-        return view('message.show', compact('purchase', 'purchases', 'messages'));
+        return view('message.show', compact(
+            'purchase',
+            'purchases',
+            'messages',
+            'hasReviewed'
+        ));
     }
 
 
@@ -68,5 +101,32 @@ class MessageController extends Controller
         ]);
 
         return redirect()->route('message.show', $purchase->id);
+    }
+
+    public function update(MessageRequest $request, Message $message)
+    {
+        // 自分のメッセージしか編集できない
+        if ($message->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $message->update([
+            'message' => $request->message,
+        ]);
+
+        return redirect()->route('message.show', $message->purchase_id);
+    }
+
+    public function destroy(Message $message)
+    {
+        if ($message->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $purchaseId = $message->purchase_id;
+
+        $message->delete();
+
+        return redirect()->route('message.show', $purchaseId);
     }
 }

@@ -4,6 +4,17 @@
     <link rel="stylesheet" href="{{ asset('css/message.css') }}">
 @endsection
 
+@php
+    $partner = $purchase->user_id === auth()->id() ? $purchase->item->user : $purchase->user;
+@endphp
+
+@php
+    $isBuyer = $purchase->user_id === auth()->id();
+    $isSeller = $purchase->item->user_id === auth()->id();
+
+    $partner = $isBuyer ? $purchase->item->user : $purchase->user;
+@endphp
+
 @section('content')
     <div class="trade-chat">
         <aside class="trade-sidebar">
@@ -11,8 +22,7 @@
 
             <div class="trade-sidebar__list">
                 @forelse($purchases as $tradePurchase)
-                    <a href="{{ route('message.show', $tradePurchase->id) }}"
-                        class="trade-sidebar__item {{ $purchase->id === $tradePurchase->id ? 'is-active' : '' }}">
+                    <a href="{{ route('message.show', $tradePurchase->id) }}" class="trade-sidebar__item">
                         {{ $tradePurchase->item->name }}
                     </a>
                 @empty
@@ -25,17 +35,23 @@
             <div class="trade-header">
                 <div class="trade-header__user">
                     <div class="trade-header__icon">
-                        @if (optional($purchase->item->user)->icon_url)
-                            <img src="{{ asset('storage/' . $purchase->item->user->icon_url) }}" alt="">
+                        @if (optional($partner)->icon_url)
+                            <img src="{{ asset('storage/' . $partner->icon_url) }}" alt="">
                         @else
                             <div class="trade-header__icon-placeholder"></div>
                         @endif
                     </div>
-
                     <h1 class="trade-header__title">
-                        「{{ $purchase->item->user->name ?? 'ユーザー名' }}」さんとの取引画面
+                        「{{ $partner->name ?? 'ユーザー名' }}」さんとの取引画面
                     </h1>
                 </div>
+                @if ($purchase->user_id === auth()->id())
+                    <div class="trade-header__complete">
+                        <button type="button" class="complete__button" id="openReviewModal">
+                            取引を完了する
+                        </button>
+                    </div>
+                @endif
             </div>
 
             <div class="trade-product">
@@ -49,7 +65,7 @@
                 </div>
             </div>
 
-            <div class="trade-messages">
+            <div class="trade-messages" id="tradeMessages">
                 @forelse($messages as $message)
                     @php
                         $isMine = $message->user_id === auth()->id();
@@ -89,13 +105,25 @@
                         </div>
 
                         @if ($message->image)
-                            <img src="{{ asset('storage/' . $message->image) }}" alt="">
+                            <div class="trade-message__body-wrap {{ $isMine ? 'is-mine' : 'is-other' }}">
+                                <div class="trade-message__image">
+                                    <img src="{{ asset('storage/' . $message->image) }}" alt="">
+                                </div>
+                            </div>
                         @endif
-
                         @if ($isMine)
                             <div class="trade-message__actions">
-                                <a href="#">編集</a>
-                                <a href="#">削除</a>
+                                <button type="button"
+                                    onclick="editMessage({{ $message->id }}, '{{ addslashes($message->message) }}')">
+                                    編集
+                                </button>
+
+                                <form action="{{ route('message.destroy', $message->id) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" onclick="return confirm('削除しますか？')">削除</button>
+                                </form>
                             </div>
                         @endif
                     </div>
@@ -131,5 +159,170 @@
                 @enderror
             </form>
         </section>
+        <div id="editModal" class="edit-modal">
+            <div class="edit-modal__content">
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <textarea name="message" id="editMessageText"></textarea>
+
+                    <button type="submit">更新</button>
+                    <button type="button" onclick="closeModal()">キャンセル</button>
+                </form>
+            </div>
+        </div>
+        <script>
+            function editMessage(id, text) {
+                const modal = document.getElementById('editModal');
+                const textarea = document.getElementById('editMessageText');
+                const form = document.getElementById('editForm');
+
+                textarea.value = text;
+
+                form.action = '/message/' + id;
+
+                modal.style.display = 'flex';
+            }
+
+            function closeModal() {
+                document.getElementById('editModal').style.display = 'none';
+            }
+        </script>
+
+        @if (($isBuyer && $purchase->status === 'trading') || ($isSeller && $purchase->status === 'paid' && !$hasReviewed))
+            <div class="review-modal" id="reviewModal">
+                <div class="review-modal__content">
+                    <div class="review-modal__header">
+                        <h2>
+                            @if ($isBuyer)
+                                取引が完了しました。
+                            @elseif ($isSeller)
+                                購入者の評価をお願いします。
+                            @endif
+                        </h2>
+                    </div>
+
+                    <div class="review-modal__body">
+                        <p>
+                            @if ($isBuyer)
+                                今回の取引相手はどうでしたか？
+                            @elseif ($isSeller)
+                                今回の購入者を評価してください。
+                            @endif
+                        </p>
+
+                        <form action="{{ route('purchase.review.store', $purchase->id) }}" method="POST">
+                            @csrf
+
+                            <input type="hidden" name="rating" id="ratingInput" value="{{ old('rating', 0) }}">
+
+                            <div class="review-stars" id="reviewStars">
+                                <span class="review-star" data-value="1">★</span>
+                                <span class="review-star" data-value="2">★</span>
+                                <span class="review-star" data-value="3">★</span>
+                                <span class="review-star" data-value="4">★</span>
+                                <span class="review-star" data-value="5">★</span>
+                            </div>
+
+                            @error('rating')
+                                <p class="review-error">{{ $message }}</p>
+                            @enderror
+
+                            <div class="review-modal__footer">
+                                <button type="submit" class="review-submit">送信する</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        @if (($isBuyer && $purchase->status === 'trading') || ($isSeller && $purchase->status === 'paid' && !$hasReviewed))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const openButton = document.getElementById('openReviewModal');
+                    const modal = document.getElementById('reviewModal');
+                    const stars = document.querySelectorAll('.review-star');
+                    const ratingInput = document.getElementById('ratingInput');
+
+                    if (openButton && modal) {
+                        openButton.addEventListener('click', function() {
+                            modal.classList.add('is-open');
+                        });
+                    }
+
+                    if (modal) {
+                        modal.addEventListener('click', function(e) {
+                            if (e.target === modal) {
+                                modal.classList.remove('is-open');
+                            }
+                        });
+                    }
+
+                    function updateStars(value) {
+                        stars.forEach(star => {
+                            const starValue = Number(star.dataset.value);
+                            if (starValue <= value) {
+                                star.classList.add('is-active');
+                            } else {
+                                star.classList.remove('is-active');
+                            }
+                        });
+                    }
+
+                    stars.forEach(star => {
+                        star.addEventListener('click', function() {
+                            const value = Number(this.dataset.value);
+                            ratingInput.value = value;
+                            updateStars(value);
+                        });
+                    });
+
+                    updateStars(Number(ratingInput.value));
+
+                    @if ($isSeller && $purchase->status === 'paid' && !$hasReviewed)
+                        modal.classList.add('is-open');
+                    @endif
+                });
+            </script>
+        @endif
+
+        @if ($errors->has('rating'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const modal = document.getElementById('reviewModal');
+                    if (modal) {
+                        modal.classList.add('is-open');
+                    }
+                });
+            </script>
+        @endif
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const messageBox = document.getElementById('tradeMessages');
+
+                if (!messageBox) return;
+
+                function scrollToBottom() {
+                    messageBox.scrollTop = messageBox.scrollHeight;
+                }
+
+                // まず通常の表示直後に下へ
+                scrollToBottom();
+
+                // 画像読み込み後に高さが変わることがあるので再調整
+                const images = messageBox.querySelectorAll('img');
+                images.forEach(img => {
+                    if (!img.complete) {
+                        img.addEventListener('load', scrollToBottom);
+                    }
+                });
+
+                // 少し遅らせてもう一回
+                setTimeout(scrollToBottom, 100);
+            });
+        </script>
     </div>
 @endsection

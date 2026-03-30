@@ -10,7 +10,16 @@
         <div class="profile">
             <img src="{{ $user->icon_url ? asset('storage/' . $user->icon_url) : asset('images/default_gray.png') }}"
                 alt="">
-            <h2>{{ $user->name }}</h2>
+            <div class="profile__info">
+                <h2>{{ $user->name }}</h2>
+                @if (!is_null($averageRating))
+                    <div class="profile__rating">
+                        @for ($i = 1; $i <= 5; $i++)
+                            <span class="profile__star {{ $i <= $averageRating ? 'is-active' : '' }}">★</span>
+                        @endfor
+                    </div>
+                @endif
+            </div>
         </div>
         <a href="/mypage/profile">プロフィールを編集</a>
     </div>
@@ -18,7 +27,12 @@
         <div class="list__flex">
             <a class="black" href="/mypage?page=sell">出品した商品</a>
             <a class="black center" href="/mypage?page=buy">購入した商品</a>
-            <a class="red" href="/mypage?page=trade">取引中の商品</a>
+            <a class="red" href="/mypage?page=trade">
+                取引中の商品
+                @if ($unreadTotal > 0)
+                    <span class="badge-total">{{ $unreadTotal }}</span>
+                @endif
+            </a>
         </div>
     </div>
     <section>
@@ -29,6 +43,11 @@
                         <a href="{{ route('message.show', $purchase->id) }}">
                             <img src="{{ asset('storage/' . $purchase->item->item_url) }}" alt="">
                             <p>{{ $purchase->item->name }}</p>
+                            @if ($purchase->unread_count > 0)
+                                <span class="badge">
+                                    {{ $purchase->unread_count }}
+                                </span>
+                            @endif
                         </a>
                     </li>
                 @empty

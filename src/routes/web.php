@@ -8,6 +8,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SellController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReviewController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -89,5 +90,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/message/{purchase_id}', [MessageController::class, 'store'])
         ->name('message.store');
+    Route::put('/message/{message}', [MessageController::class, 'update'])->name('message.update');
+    Route::delete('/message/{message}', [MessageController::class, 'destroy'])->name('message.destroy');
+});
+
+// 評価
+Route::middleware(['auth'])->group(function () {
+    Route::post('/purchase/{purchase_id}/review', [ReviewController::class, 'store'])
+        ->name('purchase.review.store');
 });
 
