@@ -111,7 +111,7 @@ STRIPE_SECRET=xxxxx
 ・phpMyAdmin: http://localhost:8080/  
 
 ## ER図
-![ER図](./frema.png)  
+![ER図](./frema-ER.png)  
 
 
 
