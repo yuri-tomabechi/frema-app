@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\ReviewRequest;
 use App\Models\Purchase;
 use App\Models\Review;
@@ -41,7 +40,6 @@ class ReviewController extends Controller
             ]
         );
 
-        // 購入者が評価したタイミングで取引完了にする
         if ($isBuyer && $purchase->status !== 'paid') {
             $purchase->update([
                 'status' => 'paid',

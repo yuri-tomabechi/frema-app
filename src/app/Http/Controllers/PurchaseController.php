@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
-use Stripe\Webhook;
-use Stripe\Event;
 use Illuminate\Http\Request;
 
 use App\Models\Purchase;

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\MessageRequest;
 use App\Models\Purchase;
 use App\Models\Message;

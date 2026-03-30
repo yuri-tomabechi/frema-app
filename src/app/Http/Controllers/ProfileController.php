@@ -8,7 +8,6 @@ use App\Models\Message;
 use App\Models\Purchase;
 use App\Http\Requests\ProfileRequest;
 
-use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
