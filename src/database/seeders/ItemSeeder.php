@@ -61,7 +61,7 @@ class ItemSeeder extends Seeder
                 'condition' => '良好',
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'item_url' => 'images/Music_Mic.jpg',
                 'name' => 'マイク',
                 'brand_name' => 'ブランドなし',
@@ -70,7 +70,7 @@ class ItemSeeder extends Seeder
                 'condition' => '目立った傷や汚れなし',
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'item_url' => 'images/red_bag.jpg',
                 'name' => 'ショルダーバッグ',
                 'brand_name' => 'ブランドなし',
@@ -79,7 +79,7 @@ class ItemSeeder extends Seeder
                 'condition' => 'やや傷や汚れあり',
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'item_url' => 'images/Tumbler.jpg',
                 'name' => 'タンブラー',
                 'brand_name' => 'ブランドなし',
@@ -88,7 +88,7 @@ class ItemSeeder extends Seeder
                 'condition' => '状態が悪い',
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'item_url' => 'images/Coffee.jpg',
                 'name' => 'コーヒーミル',
                 'brand_name' => 'Starbacks',
@@ -97,7 +97,7 @@ class ItemSeeder extends Seeder
                 'condition' => '良好',
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'item_url' => 'images/make_up.jpg',
                 'name' => 'メイクセット',
                 'brand_name' => 'ブランドなし',
