@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Auth;
 use App\Models\Item;
 use App\Http\Requests\ExhibitionRequest;
@@ -14,29 +15,34 @@ class ItemController extends Controller
     {
         $query = Item::latest();
         $user = Auth::user();
-        if ($user){
-            if(!$user->hasVerifiedEmail()){
+        if ($user) {
+            if (!$user->hasVerifiedEmail()) {
                 return redirect()->route('verification.notice');
-            }
-            else if($user->hasVerifiedEmail() && $user->address == null){
+            } else if ($user->hasVerifiedEmail() && $user->address == null) {
                 return redirect('/mypage/profile');
-            }
-            else{
+            } else {
                 $query->where('user_id', '!=', auth()->id());
             }
         }
-        $items=$query->get();
+        $items = $query->get();
         return view('item.index', compact('items'));
     }
 
 
     public function show($id)
     {
-        $item = Item::withCount(['likes', 'comments'])
+        $item = Item::with([
+            'user.reviewsReceived.reviewer'
+        ])
+            ->withCount(['likes', 'comments'])
             ->findOrFail($id);
 
+        $reviews = $item->user->reviewsReceived;
 
-        return view('item.detail', compact('item'));
+        $avgRating = $reviews->avg('rating');
+        $avgRating = $avgRating ? round($avgRating) : null;
+
+        return view('item.detail', compact('item', 'reviews', 'avgRating'));
     }
 
     public function store(ExhibitionRequest $request)
@@ -44,7 +50,7 @@ class ItemController extends Controller
 
         // ★ 画像を保存（public ディスク）
         $path = $request->file('item_url')->store('items', 'public');
-        
+
         // ★ DB 保存
         $item = Item::create([
             'name' => $request->name,
@@ -55,7 +61,7 @@ class ItemController extends Controller
             'user_id' => auth()->id(),
             'item_url' => $path,
         ]);
-        
+
         $item->categories()->attach($request->categories);
         return redirect('/mypage?page=sell');
     }

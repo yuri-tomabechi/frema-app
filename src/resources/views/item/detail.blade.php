@@ -18,7 +18,6 @@
                     <form action="{{ route('item.like', $item->id) }}" method="POST">
                         @csrf
                         <button class="favorite-btn" style="background:none;border:none;">
-                            {{-- <img src="{{ asset('images/favorite.svg_transparent.png') }}" class="favorite-icon" alt=""> --}}
                             <svg class="favorite {{ $item->likes()->where('user_id', auth()->id())->exists()? 'active': '' }}"
                                 viewBox="0 0 24 24">
                                 <path
@@ -84,7 +83,70 @@
                     </div>
                 </form>
             </div>
+            <h3>出品者情報</h3>
+            <div class="seller-rating">
+                <p class="seller-name">{{ $item->user->name }}</p>
+
+                @if ($avgRating)
+                    <p class="star avg-star">
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if ($i <= $avgRating)
+                                ★
+                            @else
+                                ☆
+                            @endif
+                        @endfor
+                    </p>
+                @endif
+            </div>
+            <h4>レビュー {{ $reviews->count() }}件</h4>
+            @forelse ($reviews as $index => $review)
+                <div class="review-item {{ $index >= 3 ? 'is-hidden' : '' }}">
+                    <div class="review-bubble">
+                        <p class="star">
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= $review->rating)
+                                    ★
+                                @else
+                                    ☆
+                                @endif
+                            @endfor
+                        </p>
+
+                        @if (!empty($review->comment))
+                            <p>{{ $review->comment }}</p>
+                        @endif
+                    </div>
+                    <small class="review-user">{{ $review->reviewer->name }}</small>
+                </div>
+            @empty
+                <p>まだレビューはありません</p>
+            @endforelse
+            @if ($reviews->count() > 3)
+                <div class="view-more">
+                    <button id="toggleReviews" class="review-toggle-btn">レビューをもっと見る</button>
+                </div>
+            @endif
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const btn = document.getElementById('toggleReviews');
+                const hiddenReviews = document.querySelectorAll('.review-item.is-hidden');
+
+                if (!btn) return;
+
+                let isOpen = false;
+
+                btn.addEventListener('click', function() {
+                    hiddenReviews.forEach(el => {
+                        el.style.display = isOpen ? 'none' : 'block';
+                    });
+
+                    btn.textContent = isOpen ? 'レビューをもっと見る' : '閉じる';
+                    isOpen = !isOpen;
+                });
+            });
+        </script>
         <script>
             document.querySelector('.favorite-btn').addEventListener('click', function() {
                 this.querySelector('svg').classList.toggle('active');

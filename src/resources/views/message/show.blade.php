@@ -261,6 +261,14 @@
                                 <p class="review-error">{{ $message }}</p>
                             @enderror
 
+                            <div class="review-form__group">
+                                <textarea name="comment" placeholder="取引の感想を書いてください（任意）" class="review-textarea">{{ old('comment') }}</textarea>
+                            </div>
+
+                            @error('comment')
+                                <p class="review-error">{{ $message }}</p>
+                            @enderror
+
                             <div class="review-modal__footer">
                                 <button type="submit" class="review-submit">送信する</button>
                             </div>

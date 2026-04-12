@@ -14,6 +14,7 @@ class Review extends Model
         'reviewer_id',
         'reviewed_user_id',
         'rating',
+        'comment',
     ];
 
     public function purchase()

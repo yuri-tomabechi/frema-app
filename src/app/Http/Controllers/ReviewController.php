@@ -37,6 +37,7 @@ class ReviewController extends Controller
             [
                 'reviewed_user_id' => $reviewedUserId,
                 'rating' => $request->rating,
+                'comment' => $request->comment ?: null,
             ]
         );
 
